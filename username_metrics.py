@@ -71,6 +71,16 @@ def vowel_consonant_ratio(in_text):
     except ZeroDivisionError:
         return 0
     
+# Return sum and count of digits in input string   
+def digit_count_sum(in_text):    
+    digit_count = 0
+    digit_sum = 0    
+    for letter in in_text:
+        letter=letter.lower()
+        if letter.isdigit():
+            digit_count+=1
+            digit_sum+=(int(letter))            
+    return [str(digit_count),str(digit_sum)]
 
     
 # Load from text file
@@ -94,12 +104,16 @@ with open(output_csv_file, 'a') as fl:
                 writer = csv.writer(fl,dialect='excel')
                 
                 if counter == 0:
-                    writer.writerow(["Username", "Username Entropy", "Username Length", "VC-bin-dec","VCR"])
+                    writer.writerow(["Username", "Username Entropy", "Username Length", "VC-bin-dec","VCR",
+                                     "Digit Count","Digit Sum"])
                 entropy = calc_entropy(in_string = userident)
                 username_length=str(len(userident))
                 vowel_consonant_bitmask=vowel_consonant_binary(in_text=userident)
                 vowel_con_ratio=vowel_consonant_ratio(in_text=userident)
-                writer.writerow([userident,entropy,username_length,vowel_consonant_bitmask,vowel_con_ratio]) 
+                digit_count = digit_count_sum(in_text=userident)[0]
+                digit_sum = digit_count_sum(in_text=userident)[1]
+                writer.writerow([userident,entropy,username_length,vowel_consonant_bitmask,vowel_con_ratio,
+                                 digit_count,digit_sum]) 
                 counter+=1
        
 fl.close()    
